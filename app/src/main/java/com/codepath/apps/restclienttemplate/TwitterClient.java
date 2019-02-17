@@ -56,7 +56,7 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		params.put("max_id", maxId);
+ 		params.put("max_id", maxId);
 		client.get(apiUrl, params, handler);
 	}
 

@@ -84,8 +84,11 @@ public class TimelineActivity extends AppCompatActivity {
                 //Prepare adapter and for more items and reset scroll listener
 
                 // Iterate through JSON array(list of tweets)
-                List<Tweet> moreTweets = tweets;
+                List<Tweet> moreTweets = new ArrayList<>();
 
+                if(response.length() <= 0) {
+                    Log.d("MoreTweets", "no data found");
+                }
                 for(int i = 0; i < response.length(); i++){
                     try {
                         // Convert each JSON object into a tweet object
@@ -95,8 +98,9 @@ public class TimelineActivity extends AppCompatActivity {
                         // Add tweet into data source(list)
                         moreTweets.add(tweet);
 
-                        if(tweet.user.uid < lowestId || lowestId == 0)
-                        {lowestId = tweet.user.uid;}
+                        //Test for newest low Id
+                        if(tweet.uid < lowestId)
+                        {lowestId = tweet.uid;}
 
                         // Notify adapter
                         adapter.notifyItemInserted(tweets.size() - 1);
@@ -110,7 +114,7 @@ public class TimelineActivity extends AppCompatActivity {
 
                 //show data we just received
                 adapter.addTweets(moreTweets);
-
+                adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
 
             }
@@ -145,8 +149,8 @@ public class TimelineActivity extends AppCompatActivity {
                         // Add tweet into data source(list)
                         tweetsToAdd.add(tweet);
 
-                        if(tweet.user.uid < lowestId || lowestId == 0)
-                        {lowestId = tweet.user.uid;}
+                        if(tweet.uid < lowestId || lowestId == 0)
+                        {lowestId = tweet.uid;}
 
                         // Notify adapter
                         adapter.notifyItemInserted(tweets.size() - 1);
@@ -171,7 +175,6 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("TwitterClient", errorResponse.toString());
             }
-
         });
     }
 }

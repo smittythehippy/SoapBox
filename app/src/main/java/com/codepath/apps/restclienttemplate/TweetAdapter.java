@@ -52,33 +52,64 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         //Convert file
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
         Date converted = new Date();
-        try {
-            converted = dateFormat.parse(tweet.createdAt);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(tweet.retweet_exist == "false") {
+            try {
+                converted = dateFormat.parse(tweet.createdAt);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            PrettyTime reformat = new PrettyTime();
+            String timestamp = reformat.format(converted);
+
+            viewHolder.tvRetweeter.setVisibility(View.GONE);
+            viewHolder.ivRetweet.setVisibility(View.GONE);
+
+            viewHolder.tvBody.setText(tweet.body);
+            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + timestamp);
+            viewHolder.tvName.setText(tweet.user.name);
+
+            //Check for verification of User
+            if (tweet.user.verified == "true") {
+                viewHolder.ivVerified.setVisibility(View.VISIBLE);
+            }
+
+            GlideApp.with(context)
+                    .load(tweet.user.profileImageUrl)
+                    .apply(new RequestOptions().circleCrop())
+                    .into(viewHolder.ivProfilePic);
         }
-
-        PrettyTime reformat = new PrettyTime();
-        String timestamp = reformat.format(converted);
-
-        viewHolder.tvBody.setText(tweet.body);
-        viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + timestamp);
-        viewHolder.tvName.setText(tweet.user.name);
-
-        //Check for verification of User
-        if(tweet.user.verified == "true"){
-            viewHolder.ivVerified.setVisibility(View.VISIBLE);
-        }
-
         // Check to see if tweet is a retweet
-       /* if(tweet.retweet_exist == "true"){
-            viewHolder.tvRetweetHeader.setText(tweet.user.name + " Retweeted");
-        }*/
+        else{
+            try {
+                converted = dateFormat.parse(tweet.retweet.createdAt);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-        GlideApp.with(context)
-                .load(tweet.user.profileImageUrl)
-                .apply(new RequestOptions().circleCrop())
-                .into(viewHolder.ivProfilePic);
+            PrettyTime reformat = new PrettyTime();
+            String timestamp = reformat.format(converted);
+
+            viewHolder.tvBody.setText(tweet.retweet.body);
+            viewHolder.tvScreenNameAndTime.setText("@" + tweet.retweet.user.screenName + " • " + timestamp);
+            viewHolder.tvName.setText(tweet.retweet.user.name);
+
+            //Check for verification of User
+            if (tweet.retweet.user.verified == "true") {
+                viewHolder.ivVerified.setVisibility(View.VISIBLE);
+            }
+
+            viewHolder.ivRetweet.setVisibility(View.VISIBLE);
+            viewHolder.tvRetweeter.setVisibility(View.VISIBLE);
+            viewHolder.tvRetweeter.setText(tweet.user.name + " Retweeted");
+
+            GlideApp.with(context)
+                    .load(tweet.retweet.user.profileImageUrl)
+                    .apply(new RequestOptions().circleCrop())
+                    .into(viewHolder.ivProfilePic);
+        }
+
+
     }
 
     @Override
@@ -106,7 +137,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public ImageView ivProfilePic;
         public TextView tvName;
         public ImageView ivVerified;
-     //   public TextView tvRetweetHeader;
+        public TextView tvRetweeter;
+        public ImageView ivRetweet;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -115,7 +147,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvBody = itemView.findViewById(R.id.tvBody);
             tvName = itemView.findViewById(R.id.tvName);
             ivVerified = itemView.findViewById(R.id.ivVerified);
-            ivVerified.setVisibility(View.INVISIBLE);
+            tvRetweeter = itemView.findViewById(R.id.tvRetweeter);
+            ivRetweet = itemView.findViewById(R.id.ivRetweet);
+
+            ivVerified.setVisibility(View.GONE);
         }
     }
 }

@@ -145,9 +145,7 @@ public class TimelineActivity extends AppCompatActivity {
                         // Convert each JSON object into a tweet object
                         JSONObject jsonTweetObject = response.getJSONObject(i);
                         Tweet tweet = Tweet.fromJson(jsonTweetObject);
-                        /*if(tweet.retweet != null){
-                            tweet = tweet.retweet;
-                        }*/
+
                         // Add tweet into data source(list)
                         tweetsToAdd.add(tweet);
 

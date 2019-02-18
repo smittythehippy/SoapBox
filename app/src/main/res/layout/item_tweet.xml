@@ -13,9 +13,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRetweeter"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -25,12 +26,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif"
         android:textColor="@color/secondaryText"
         app:layout_constraintBottom_toTopOf="@+id/tvBody"
         app:layout_constraintStart_toEndOf="@+id/ivVerified"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRetweeter"
         tools:text="Smittythehippy" />
 
     <TextView
@@ -46,10 +46,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="This is my rant!" />
+        tools:text="This is my rant!"
+        android:autoLink="web"/>
 
     <TextView
         android:id="@+id/tvName"
@@ -57,26 +58,58 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
+        android:textColor="#000000"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvRetweeter"
         tools:text="Kyle Smith" />
 
     <ImageView
         android:id="@+id/ivVerified"
-        android:layout_width="15dp"
+        android:layout_width="10dp"
         android:layout_height="0dp"
         android:layout_above="@+id/tvBody"
         android:layout_alignParentTop="true"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/tvName"
         app:layout_constraintBottom_toTopOf="@+id/tvBody"
         app:layout_constraintStart_toEndOf="@+id/tvName"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRetweeter"
         app:layout_constraintVertical_bias="0.96"
         app:srcCompat="@drawable/twitter_verified" />
+
+    <TextView
+        android:id="@+id/tvRetweeter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/secondaryText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Retweeted by Jesus" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="58dp" />
+
+    <ImageView
+        android:id="@+id/ivRetweet"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivProfilePic"
+        app:layout_constraintEnd_toStartOf="@+id/tvRetweeter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/retweet" />
 
 </android.support.constraint.ConstraintLayout>

@@ -3,6 +3,9 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.util.Linkify;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -109,7 +114,23 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     .into(viewHolder.ivProfilePic);
         }
 
+        Linkify.TransformFilter filter = new Linkify.TransformFilter() {
+            @Override
+            public final String transformUrl(final Matcher match, String url) {
+                return match.group();
+            }
+        };
 
+        Pattern mentionPattern = Pattern.compile("@([A-Za-z0-9_-]+)");
+        String mentionScheme = "http://www.twitter.com/";
+        Linkify.addLinks(viewHolder.tvBody, mentionPattern, mentionScheme, null, filter);
+
+        Pattern hashtagPattern = Pattern.compile("#([A-Za-z0-9_-]+)");
+        String hashtagScheme = "http://www.twitter.com/search/";
+        Linkify.addLinks(viewHolder.tvBody, hashtagPattern, hashtagScheme, null, filter);
+
+        Pattern urlPattern = Patterns.WEB_URL;
+        Linkify.addLinks(viewHolder.tvBody, urlPattern, null, null, filter);
     }
 
     @Override
@@ -130,7 +151,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     }
 
     //Define Viewholder
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvBody;
         public TextView tvScreenNameAndTime;
@@ -154,3 +175,4 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         }
     }
 }
+

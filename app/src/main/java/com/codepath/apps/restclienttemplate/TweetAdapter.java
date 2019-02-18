@@ -10,11 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import org.ocpsoft.prettytime.PrettyTime;
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
@@ -41,9 +48,37 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Tweet tweet = tweets.get(i);
+
+        //Convert file
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+        Date converted = new Date();
+        try {
+            converted = dateFormat.parse(tweet.createdAt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        PrettyTime reformat = new PrettyTime();
+        String timestamp = reformat.format(converted);
+
         viewHolder.tvBody.setText(tweet.body);
-        viewHolder.tvScreenName.setText(tweet.user.screenName);
-        Glide.with(context).load(tweet.user.profileImageUrl).into(viewHolder.ivProfilePic);
+        viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + timestamp);
+        viewHolder.tvName.setText(tweet.user.name);
+
+        //Check for verification of User
+        if(tweet.user.verified == "true"){
+            viewHolder.ivVerified.setVisibility(View.VISIBLE);
+        }
+
+        // Check to see if tweet is a retweet
+       /* if(tweet.retweet_exist == "true"){
+            viewHolder.tvRetweetHeader.setText(tweet.user.name + " Retweeted");
+        }*/
+
+        GlideApp.with(context)
+                .load(tweet.user.profileImageUrl)
+                .apply(new RequestOptions().circleCrop())
+                .into(viewHolder.ivProfilePic);
     }
 
     @Override
@@ -67,16 +102,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView tvBody;
-        public TextView tvScreenName;
+        public TextView tvScreenNameAndTime;
         public ImageView ivProfilePic;
-
+        public TextView tvName;
+        public ImageView ivVerified;
+     //   public TextView tvRetweetHeader;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvScreenName = itemView.findViewById(R.id.tvScreenName);
+            tvScreenNameAndTime = itemView.findViewById(R.id.tvScreenNameAndTime);
             tvBody = itemView.findViewById(R.id.tvBody);
-
+            tvName = itemView.findViewById(R.id.tvName);
+            ivVerified = itemView.findViewById(R.id.ivVerified);
+            ivVerified.setVisibility(View.INVISIBLE);
         }
     }
 }

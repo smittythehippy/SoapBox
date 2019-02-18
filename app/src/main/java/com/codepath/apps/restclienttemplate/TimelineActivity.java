@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -55,6 +56,7 @@ public class TimelineActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(llm);
         rvTweets.setAdapter(adapter);
+        rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL));
 
         populateHomeTimeline();
 
@@ -109,14 +111,12 @@ public class TimelineActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
                 //clear existing data
 
                 //show data we just received
                 adapter.addTweets(moreTweets);
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
-
             }
 
             @Override
@@ -145,7 +145,9 @@ public class TimelineActivity extends AppCompatActivity {
                         // Convert each JSON object into a tweet object
                         JSONObject jsonTweetObject = response.getJSONObject(i);
                         Tweet tweet = Tweet.fromJson(jsonTweetObject);
-
+                        /*if(tweet.retweet != null){
+                            tweet = tweet.retweet;
+                        }*/
                         // Add tweet into data source(list)
                         tweetsToAdd.add(tweet);
 

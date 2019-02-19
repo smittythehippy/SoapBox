@@ -69,11 +69,28 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
             //Check for media
             if(tweet.media_exists == "true") {
-                viewHolder.ivMedia.setVisibility(View.VISIBLE);
                 GlideApp.with(context)
                         .load(tweet.mediaUrl)
                         .transforms(new CenterCrop(), new RoundedCornersTransformation(radius, margin))
                         .into(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.VISIBLE);
+            }
+            else if(tweet.videoUrl_exists == "true")
+            {
+                /* To be implemented
+                GlideApp.with(context)
+                        .load(tweet.videoUrl)
+                        .transforms(new CenterCrop(), new RoundedCornersTransformation(radius, margin))
+                        .into(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.VISIBLE);
+                */
+                GlideApp.with(context).clear(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.GONE);
+
+            }
+            else{
+                GlideApp.with(context).clear(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.GONE);
             }
             //Check for verification of User
             if (tweet.user.verified == "true") {
@@ -92,11 +109,28 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
             //Check for media
             if(tweet.retweet.media_exists == "true") {
-                viewHolder.ivMedia.setVisibility(View.VISIBLE);
                 GlideApp.with(context)
                         .load(tweet.retweet.mediaUrl)
                         .transforms(new CenterCrop(), new RoundedCornersTransformation(radius, margin))
                         .into(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.VISIBLE);
+            }
+            else if(tweet.retweet.videoUrl_exists == "true")
+            {
+                /* To be implemented
+                GlideApp.with(context)
+                        .load(tweet.retweet.videoUrl)
+                        .transforms(new CenterCrop(), new RoundedCornersTransformation(radius, margin))
+                        .into(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.VISIBLE);
+                */
+                GlideApp.with(context).clear(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.GONE);
+
+            }
+            else{
+                GlideApp.with(context).clear(viewHolder.ivMedia);
+                viewHolder.ivMedia.setVisibility(View.GONE);
             }
 
             //Check for verification of User
@@ -114,7 +148,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     .into(viewHolder.ivProfilePic);
         }
 
-        // From user astuetz on Stack OverFlow: https://stackoverflow.com/questions/4599786/android-linkify-both-web-and-mentions-all-in-the-same-textview/10145943#10145943
         Linkify.TransformFilter filter = new Linkify.TransformFilter() {
             @Override
             public final String transformUrl(final Matcher match, String url) {
@@ -123,14 +156,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         };
 
         Pattern mentionPattern = Pattern.compile("@([A-Za-z0-9_-]+)");
-        String mentionScheme = "http://www.twitter.com/";
-        Linkify.addLinks(viewHolder.tvBody, mentionPattern, mentionScheme, null, filter);
-
         Pattern hashtagPattern = Pattern.compile("#([A-Za-z0-9_-]+)");
-        String hashtagScheme = "http://www.twitter.com/search/";
-        Linkify.addLinks(viewHolder.tvBody, hashtagPattern, hashtagScheme, null, filter);
-
         Pattern urlPattern = Patterns.WEB_URL;
+
+        String mentionScheme = "http://www.twitter.com/";
+        String hashtagScheme = "http://www.twitter.com/search/";
+
+        Linkify.addLinks(viewHolder.tvBody, mentionPattern, mentionScheme, null, filter);
+        Linkify.addLinks(viewHolder.tvBody, hashtagPattern, hashtagScheme, null, filter);
         Linkify.addLinks(viewHolder.tvBody, urlPattern, null, null, filter);
     }
 

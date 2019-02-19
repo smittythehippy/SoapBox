@@ -44,7 +44,7 @@ public class Tweet {
         tweet.createdAt = TimeFormatter.getTimeDifference(tweet.createdAt);
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
 
-
+        // Check if tweet is a retweet
         if (jsonObject.has("retweeted_status")) {
             tweet.retweet_exist = "true";
 
@@ -55,10 +55,12 @@ public class Tweet {
             tweet.retweet.createdAt = TimeFormatter.getTimeDifference(tweet.retweet.createdAt);
             tweet.retweet.user = User.fromJson(jsonObject.getJSONObject("retweeted_status").getJSONObject("user"));
 
+            // Check for embedded media
             if(jsonObject.getJSONObject("retweeted_status").has("extended_entities")) {
                 String temp = jsonObject.getJSONObject("retweeted_status").getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).getString("type");
                 if(temp.equals("photo")) {
                     tweet.retweet.media_exists = "true";
+                    tweet.retweet.videoUrl_exists = "false";
                     tweet.retweet.mediaUrl = jsonObject.getJSONObject("retweeted_status")
                             .getJSONObject("extended_entities")
                             .getJSONArray("media")
@@ -68,6 +70,7 @@ public class Tweet {
                 else if(temp.equals("video")) {
                     if (jsonObject.getJSONObject("retweeted_status").getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).has("video_info")) {
                         tweet.retweet.videoUrl_exists = "true";
+                        tweet.retweet.media_exists = "false";
                         tweet.retweet.videoUrl = jsonObject.getJSONObject("retweeted_status")
                                 .getJSONObject("extended_entities")
                                 .getJSONArray("media")
@@ -84,13 +87,14 @@ public class Tweet {
                 tweet.retweet.videoUrl_exists = "false";
             }
         }
-        else {
+        else if (jsonObject.has("extended_entities")) {
             tweet.retweet_exist = "false";
-        }
-        if(jsonObject.has("extended_entities")) {
+
+            // Check for embedded media
             String temp = jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).getString("type");
             if(temp.equals("photo")){
                 tweet.media_exists = "true";
+                tweet.videoUrl_exists = "false";
                 tweet.mediaUrl = jsonObject.getJSONObject("extended_entities")
                         .getJSONArray("media")
                         .getJSONObject(0)
@@ -99,6 +103,7 @@ public class Tweet {
             else if(temp.equals("video")) {
                 if (jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).has("video_info")) {
                     tweet.videoUrl_exists = "true";
+                    tweet.media_exists = "false";
                     tweet.videoUrl = jsonObject.getJSONObject("extended_entities")
                             .getJSONArray("media")
                             .getJSONObject(1)
@@ -110,9 +115,11 @@ public class Tweet {
             }
         }
         else {
+            tweet.retweet_exist = "false";
             tweet.media_exists = "false";
             tweet.videoUrl_exists = "false";
         }
+
 
         return tweet;
     }

@@ -49,6 +49,7 @@ Describe any challenges encountered while building the app.
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Glide](https://github.com/bumptech/glide) - Image loading and caching library for Android
 - [TimeFormatter](https://github.com/nesquena/TimeFormatter/blob/master/TimeFormatter.java) - Easy relative time formatting
+- [Linkifiy](https://github.com/SoapBox/linkifyjs) - Parses bodies of text and creates hyperlinks where appropriate.
 ## License
 
     Copyright [yyyy] [name of copyright owner]

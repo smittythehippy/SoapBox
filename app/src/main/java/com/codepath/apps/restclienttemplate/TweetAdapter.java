@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
@@ -32,6 +33,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private Context context;
     private List<Tweet> tweets;
+    final int radius = 20;
+    final int margin = 5;
 
     public TweetAdapter(Context context, List<Tweet> tweets) {
         this.context = context;
@@ -55,25 +58,23 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         Tweet tweet = tweets.get(i);
 
         //Convert file
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-        Date converted = new Date();
         if(tweet.retweet_exist == "false") {
-            try {
-                converted = dateFormat.parse(tweet.createdAt);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            PrettyTime reformat = new PrettyTime();
-            String timestamp = reformat.format(converted);
 
             viewHolder.tvRetweeter.setVisibility(View.GONE);
             viewHolder.ivRetweet.setVisibility(View.GONE);
 
             viewHolder.tvBody.setText(tweet.body);
-            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + timestamp);
+            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + tweet.createdAt);
             viewHolder.tvName.setText(tweet.user.name);
 
+            //Check for media
+            if(tweet.media_exists == "true") {
+                viewHolder.ivMedia.setVisibility(View.VISIBLE);
+                GlideApp.with(context)
+                        .load(tweet.mediaUrl)
+                        .transforms(new CenterCrop(), new RoundedCornersTransformation(radius, margin))
+                        .into(viewHolder.ivMedia);
+            }
             //Check for verification of User
             if (tweet.user.verified == "true") {
                 viewHolder.ivVerified.setVisibility(View.VISIBLE);
@@ -84,20 +85,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     .apply(new RequestOptions().circleCrop())
                     .into(viewHolder.ivProfilePic);
         }
-        // Check to see if tweet is a retweet
         else{
-            try {
-                converted = dateFormat.parse(tweet.retweet.createdAt);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            PrettyTime reformat = new PrettyTime();
-            String timestamp = reformat.format(converted);
-
             viewHolder.tvBody.setText(tweet.retweet.body);
-            viewHolder.tvScreenNameAndTime.setText("@" + tweet.retweet.user.screenName + " • " + timestamp);
+            viewHolder.tvScreenNameAndTime.setText("@" + tweet.retweet.user.screenName + " • " + tweet.retweet.createdAt);
             viewHolder.tvName.setText(tweet.retweet.user.name);
+
+            //Check for media
+            if(tweet.retweet.media_exists == "true") {
+                viewHolder.ivMedia.setVisibility(View.VISIBLE);
+                GlideApp.with(context)
+                        .load(tweet.retweet.mediaUrl)
+                        .transforms(new CenterCrop(), new RoundedCornersTransformation(radius, margin))
+                        .into(viewHolder.ivMedia);
+            }
 
             //Check for verification of User
             if (tweet.retweet.user.verified == "true") {
@@ -114,6 +114,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     .into(viewHolder.ivProfilePic);
         }
 
+        // From user astuetz on Stack OverFlow: https://stackoverflow.com/questions/4599786/android-linkify-both-web-and-mentions-all-in-the-same-textview/10145943#10145943
         Linkify.TransformFilter filter = new Linkify.TransformFilter() {
             @Override
             public final String transformUrl(final Matcher match, String url) {
@@ -160,6 +161,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public ImageView ivVerified;
         public TextView tvRetweeter;
         public ImageView ivRetweet;
+        public ImageView ivMedia;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -170,9 +172,22 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             ivVerified = itemView.findViewById(R.id.ivVerified);
             tvRetweeter = itemView.findViewById(R.id.tvRetweeter);
             ivRetweet = itemView.findViewById(R.id.ivRetweet);
+            ivMedia = itemView.findViewById(R.id.ivMedia);
 
+            ivMedia.setVisibility(View.GONE);
             ivVerified.setVisibility(View.GONE);
         }
     }
 }
+            /*To use with detailed tweet view
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+            Date converted = new Date();
 
+            try {
+                converted = dateFormat.parse(tweet.createdAt);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            PrettyTime reformat = new PrettyTime();
+            String timestamp = reformat.format(converted);
+            */

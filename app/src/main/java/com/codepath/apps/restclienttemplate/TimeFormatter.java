@@ -12,6 +12,7 @@ import java.util.TimeZone;
  * String representing the relative time difference, e.g. "2m", "6d", "23 May", "1 Jan 14"
  * depending on how great the time difference between now and the given date is.
  * This, as of 2016-06-29, matches the behavior of the official Twitter app.
+ * Source: https://github.com/nesquena/TimeFormatter/blob/master/TimeFormatter.java
  */
 public class TimeFormatter {
     public static String getTimeDifference(String rawJsonDate) {

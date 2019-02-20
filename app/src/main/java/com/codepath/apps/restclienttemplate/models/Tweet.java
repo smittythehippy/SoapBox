@@ -9,7 +9,9 @@ import com.codepath.apps.restclienttemplate.TimeFormatter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 @Entity
 public class Tweet {
 
@@ -34,7 +36,9 @@ public class Tweet {
 
     public String videoUrl;
 
+    public Tweet(){
 
+    }
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
 

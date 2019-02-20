@@ -7,7 +7,9 @@ import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 @Entity
 public class User {
     @ColumnInfo
@@ -20,6 +22,10 @@ public class User {
     public String profileImageUrl;
     @ColumnInfo
     public String verified;
+
+    public User(){
+
+    }
 
     public static User fromJson(JSONObject jsonObject) throws JSONException {
         User user = new User();

@@ -1,9 +1,12 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.Spannable;
+import android.text.Spanned;
 import android.text.util.Linkify;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -29,12 +32,26 @@ import java.util.regex.Pattern;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE;
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV;
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_HEADING;
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST;
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM;
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH;
+
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private Context context;
     private List<Tweet> tweets;
     final int radius = 20;
     final int margin = 5;
+
+    public static final int FROM_HTML_MODE_COMPACT =
+            FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH
+                    | FROM_HTML_SEPARATOR_LINE_BREAK_HEADING
+                    | FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM
+                    | FROM_HTML_SEPARATOR_LINE_BREAK_LIST
+                    | FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE;
 
     public TweetAdapter(Context context, List<Tweet> tweets) {
         this.context = context;
@@ -63,7 +80,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             viewHolder.tvRetweeter.setVisibility(View.GONE);
             viewHolder.ivRetweet.setVisibility(View.GONE);
 
-            viewHolder.tvBody.setText(tweet.body);
+            viewHolder.tvBody.setText(fromHtml(tweet.body));
             viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + tweet.createdAt);
             viewHolder.tvName.setText(tweet.user.name);
 
@@ -103,7 +120,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     .into(viewHolder.ivProfilePic);
         }
         else{
-            viewHolder.tvBody.setText(tweet.retweet.body);
+            viewHolder.tvBody.setText(fromHtml(tweet.retweet.body));
             viewHolder.tvScreenNameAndTime.setText("@" + tweet.retweet.user.screenName + " • " + tweet.retweet.createdAt);
             viewHolder.tvName.setText(tweet.retweet.user.name);
 
@@ -182,6 +199,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     public void addTweets(List<Tweet> tweetsList) {
         tweets.addAll(tweetsList);
         notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT);
+        } else {
+            return Html.fromHtml(html);
+        }
     }
 
     //Define Viewholder

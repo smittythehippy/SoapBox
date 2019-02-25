@@ -41,6 +41,7 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 - [x] Appropriate timestamps for detail or list view
+- [x] Retweets are correctly displayed, with original user's tweet data
 
 ## Video Walkthrough
 

@@ -1,12 +1,14 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterApp;
+import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.SampleModel;
 import com.codepath.apps.restclienttemplate.models.SampleModelDao;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
@@ -20,7 +22,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		protected Void doInBackground(SampleModel... sampleModels) {
 			sampleModelDao.insertModel(sampleModels);
 			return null;
-		};
+		}
 	};
 
 	@Override

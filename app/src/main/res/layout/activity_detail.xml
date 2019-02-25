@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="5dp"
+    android:background="#ffffff">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        tools:context=".activities.DetailActivity">
+
+        <ImageView
+            android:id="@+id/ivMedia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@+id/tvCreatedAt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/tvBody"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvScreenNameAndTime"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="sans-serif"
+            android:textColor="#000000"
+            android:textColorLink="@color/twitter_blue"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/ivMedia"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            tools:text="This is my rant!" />
+
+        <ImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="50dp"
+            android:layout_height="46dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#000000"
+            app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Kyle Dude" />
+
+        <TextView
+            android:id="@+id/tvScreenName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="#ff000000"
+            android:tint="@color/medium_gray_50"
+            app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            tools:text="@kyledude" />
+
+        <ImageView
+            android:id="@+id/ivVerified"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/tvName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/twitter_verified" />
+
+        <TextView
+            android:id="@+id/tvCreatedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#ff000000"
+            android:tint="@color/medium_gray_50"
+            app:layout_constraintBottom_toTopOf="@+id/tvRetweetCount"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="date" />
+
+        <TextView
+            android:id="@+id/tvRetweetCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#ff000000"
+            android:tint="@color/medium_gray_50"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="500 Retweets" />
+
+        <TextView
+            android:id="@+id/tvLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#ff000000"
+            android:tint="@color/medium_gray_50"
+            app:layout_constraintStart_toEndOf="@+id/tvRetweetCount"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreatedAt"
+            tools:text="100 Likes" />
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

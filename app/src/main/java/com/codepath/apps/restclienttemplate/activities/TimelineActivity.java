@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -12,9 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
+import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TweetAdapter;
+import com.codepath.apps.restclienttemplate.TwitterApp;
+import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,6 +35,7 @@ import cz.msebera.android.httpclient.Header;
 public class TimelineActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE = 17;
+    private long lowestId = 0;
 
     private TwitterClient client;
     private TweetAdapter adapter;
@@ -38,7 +43,8 @@ public class TimelineActivity extends AppCompatActivity {
     private RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
-    private long lowestId = 0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +112,6 @@ public class TimelineActivity extends AppCompatActivity {
             // navigate to compose activity
             Intent intent = new Intent(this, ComposeActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
-
         }
         return true;
     }

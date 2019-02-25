@@ -1,12 +1,10 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
-import android.os.Build;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.Spanned;
 import android.text.util.Linkify;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -15,17 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.codepath.apps.restclienttemplate.activities.DetailActivity;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
-import org.ocpsoft.prettytime.PrettyTime;
-import org.w3c.dom.Text;
+import org.parceler.Parcels;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +27,6 @@ import java.util.regex.Pattern;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE;
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV;
 import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_HEADING;
 import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST;
 import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM;
@@ -72,16 +65,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     //Bind values based on the position of the element
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Tweet tweet = tweets.get(i);
+        final Tweet tweet = tweets.get(i);
 
-        //Convert file
+        // Check first for non-retweet
         if(tweet.retweet_exist == "false") {
 
             viewHolder.tvRetweeter.setVisibility(View.GONE);
             viewHolder.ivRetweet.setVisibility(View.GONE);
 
-            viewHolder.tvBody.setText(fromHtml(tweet.body));
-            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + tweet.createdAt);
+            viewHolder.tvBody.setText(tweet.body);
+            String tempTime = TimeFormatter.getTimeDifference(tweet.createdAt);
+            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " +tempTime);
             viewHolder.tvName.setText(tweet.user.name);
 
             //Check for media
@@ -120,7 +114,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     .into(viewHolder.ivProfilePic);
         }
         else{
-            viewHolder.tvBody.setText(fromHtml(tweet.retweet.body));
+            viewHolder.tvBody.setText(tweet.retweet.body);
             viewHolder.tvScreenNameAndTime.setText("@" + tweet.retweet.user.screenName + " • " + tweet.retweet.createdAt);
             viewHolder.tvName.setText(tweet.retweet.user.name);
 
@@ -182,6 +176,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         Linkify.addLinks(viewHolder.tvBody, mentionPattern, mentionScheme, null, filter);
         Linkify.addLinks(viewHolder.tvBody, hashtagPattern, hashtagScheme, null, filter);
         Linkify.addLinks(viewHolder.tvBody, urlPattern, null, null, filter);
+
+        //Add click listener on the whole row
+        //Navigate to detail activity
+        viewHolder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, DetailActivity.class);
+                i.putExtra("tweet", Parcels.wrap(tweet));
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -201,15 +206,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         notifyDataSetChanged();
     }
 
-    @SuppressWarnings("deprecation")
-    public static Spanned fromHtml(String html){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT);
-        } else {
-            return Html.fromHtml(html);
-        }
-    }
-
     //Define Viewholder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -221,6 +217,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public TextView tvRetweeter;
         public ImageView ivRetweet;
         public ImageView ivMedia;
+        public ConstraintLayout container;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -232,6 +229,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvRetweeter = itemView.findViewById(R.id.tvRetweeter);
             ivRetweet = itemView.findViewById(R.id.ivRetweet);
             ivMedia = itemView.findViewById(R.id.ivMedia);
+            container = itemView.findViewById(R.id.container);
 
             ivMedia.setVisibility(View.GONE);
             ivVerified.setVisibility(View.GONE);

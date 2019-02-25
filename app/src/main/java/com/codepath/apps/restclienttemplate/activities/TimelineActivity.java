@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
 import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
@@ -43,7 +45,7 @@ public class TimelineActivity extends AppCompatActivity {
     private RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
-
+    private FloatingActionButton composeFab;
 
 
     @Override
@@ -68,6 +70,7 @@ public class TimelineActivity extends AppCompatActivity {
         // Find recycler view from timeline
         rvTweets = findViewById(R.id.rvTweets);
 
+        composeFab = findViewById(R.id.composeFab);
         // Initialize list of tweets and adapter from tha data source
         tweets = new ArrayList<>();
         adapter = new TweetAdapter(this, tweets);
@@ -80,6 +83,14 @@ public class TimelineActivity extends AppCompatActivity {
 
         populateHomeTimeline();
 
+        composeFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("FAB", "clicked");
+                Intent intent = new Intent(getApplicationContext(), ComposeActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -97,6 +108,7 @@ public class TimelineActivity extends AppCompatActivity {
         };
         rvTweets.addOnScrollListener(scrollListener);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

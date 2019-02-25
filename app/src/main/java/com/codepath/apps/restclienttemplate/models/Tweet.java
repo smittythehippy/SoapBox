@@ -46,6 +46,8 @@ public class Tweet {
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+        tweet.retweetCount = jsonObject.getString("retweet_count");
+        tweet.likeCount = jsonObject.getString("favorite_count");
 
         // Check if tweet is a retweet
         if (jsonObject.has("retweeted_status")) {
@@ -94,9 +96,6 @@ public class Tweet {
         }
         else if (jsonObject.has("extended_entities")) {
             tweet.retweet_exist = "false";
-
-            tweet.retweetCount = jsonObject.getString("retweet_count");
-            tweet.likeCount = jsonObject.getString("favorite_count");
 
             // Check for embedded media
             String temp = jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).getString("type");

@@ -79,9 +79,9 @@ public class TimelineActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(llm);
         rvTweets.setAdapter(adapter);
-        rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL));
 
         populateHomeTimeline();
+        rvTweets.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
 
         composeFab.setOnClickListener(new View.OnClickListener() {
             @Override

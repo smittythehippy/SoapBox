@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -77,8 +78,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             String tempTime = TimeFormatter.getTimeDifference(tweet.createdAt);
             viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " +tempTime);
             viewHolder.tvName.setText(tweet.user.name);
+            viewHolder.tvRetweetCount.setText(tweet.retweetCount);
+            viewHolder.tvLikeCount.setText(tweet.likeCount);
 
-            //Check for media
+                    //Check for media
             if(tweet.media_exists == "true") {
                 GlideApp.with(context)
                         .load(tweet.mediaUrl)
@@ -117,6 +120,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             viewHolder.tvBody.setText(tweet.retweet.body);
             viewHolder.tvScreenNameAndTime.setText("@" + tweet.retweet.user.screenName + " • " + tweet.retweet.createdAt);
             viewHolder.tvName.setText(tweet.retweet.user.name);
+
+            viewHolder.tvRetweetCount.setText(tweet.retweet.retweetCount);
+            viewHolder.tvLikeCount.setText(tweet.retweet.likeCount);
 
             //Check for media
             if(tweet.retweet.media_exists == "true") {
@@ -217,6 +223,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public TextView tvRetweeter;
         public ImageView ivRetweet;
         public ImageView ivMedia;
+        public ImageButton btnReply;
+        public ImageButton btnRetweet;
+        public TextView tvRetweetCount;
+        public ImageButton btnLike;
+        public TextView tvLikeCount;
+
         public ConstraintLayout container;
 
         public ViewHolder(@NonNull View itemView) {
@@ -229,6 +241,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvRetweeter = itemView.findViewById(R.id.tvRetweeter);
             ivRetweet = itemView.findViewById(R.id.ivRetweet);
             ivMedia = itemView.findViewById(R.id.ivMedia);
+            btnReply = itemView.findViewById(R.id.btnReply);
+            btnRetweet = itemView.findViewById(R.id.btnRetweet);
+            tvRetweetCount = itemView.findViewById(R.id.tvRetweetCount);
+            btnLike = itemView.findViewById(R.id.btnLike);
+            tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
+
             container = itemView.findViewById(R.id.container);
 
             ivMedia.setVisibility(View.GONE);

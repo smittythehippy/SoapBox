@@ -44,6 +44,10 @@ public class DetailActivity extends AppCompatActivity {
 
         tweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
 
+        if(tweet.retweet_exist.equals("true")){
+            tweet = tweet.retweet;
+        }
+
         tvBody = findViewById(R.id.tvBody);
         tvName = findViewById(R.id.tvName);
         tvScreenName = findViewById(R.id.tvScreenName);

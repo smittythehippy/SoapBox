@@ -45,6 +45,7 @@ public class Tweet {
         tweet.body = jsonObject.getString("full_text");
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
+        tweet.createdAt = TimeFormatter.getTimeDifference(tweet.createdAt);
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.retweetCount = jsonObject.getString("retweet_count");
         tweet.likeCount = jsonObject.getString("favorite_count");

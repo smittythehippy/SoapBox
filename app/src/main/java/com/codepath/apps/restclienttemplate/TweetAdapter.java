@@ -27,25 +27,12 @@ import java.util.regex.Pattern;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE;
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_HEADING;
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST;
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM;
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH;
-
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private Context context;
     private List<Tweet> tweets;
     final int radius = 20;
     final int margin = 5;
-
-    public static final int FROM_HTML_MODE_COMPACT =
-            FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH
-                    | FROM_HTML_SEPARATOR_LINE_BREAK_HEADING
-                    | FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM
-                    | FROM_HTML_SEPARATOR_LINE_BREAK_LIST
-                    | FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE;
 
     public TweetAdapter(Context context, List<Tweet> tweets) {
         this.context = context;
@@ -75,8 +62,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             viewHolder.ivRetweet.setVisibility(View.GONE);
 
             viewHolder.tvBody.setText(tweet.body);
-            String tempTime = TimeFormatter.getTimeDifference(tweet.createdAt);
-            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " +tempTime);
+            viewHolder.tvScreenNameAndTime.setText("@" + tweet.user.screenName + " • " + tweet.createdAt);
             viewHolder.tvName.setText(tweet.user.name);
             viewHolder.tvRetweetCount.setText(tweet.retweetCount);
             viewHolder.tvLikeCount.setText(tweet.likeCount);
